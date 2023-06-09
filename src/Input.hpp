@@ -3,7 +3,7 @@
 
 #include <xentara/config/Resolver.hpp>
 #include <xentara/data/ReadHandle.hpp>
-#include <xentara/model/GenericElement.hpp>
+#include <xentara/model/Element.hpp>
 #include <xentara/utils/json/decoder/Value.hpp>
 
 #include <memory>
@@ -30,7 +30,7 @@ public:
 
 private:
 	/// @brief Gets a read handle
-	auto readHandle(const model::GenericElement &element, std::string_view attributeName) -> data::ReadHandle;
+	auto readHandle(const model::Element &element, std::string_view attributeName) -> data::ReadHandle;
 
 	/// @brief Gets a name for the element for use in error messages
 	auto elementName() const -> std::string;
@@ -43,7 +43,7 @@ private:
 	[[noreturn]] auto handleReadError(std::error_code error) -> void;
 
 	/// @brief The xentara element representing the input we are reading
-	std::weak_ptr<model::GenericElement> _element;
+	std::weak_ptr<model::Element> _element;
 
 	/// @brief The read handle for the quality of the input
 	data::ReadHandle _quality;

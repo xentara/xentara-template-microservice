@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.25)
 
 # TODO: rename project and add description, URL etc.
 project(xentara-template-microservice LANGUAGES CXX)
@@ -24,14 +24,18 @@ add_library(
 	"src/Attributes.hpp"
 	"src/CustomError.cpp"
 	"src/CustomError.hpp"
+	"src/Events.cpp"
+	"src/Events.hpp"
 	"src/Input.cpp"
 	"src/Input.hpp"
 	"src/Output.cpp"
 	"src/Output.hpp"
 	"src/Plugin.cpp"
 	"src/Plugin.hpp"
-	"src/ServiceProvider.cpp"
-	"src/ServiceProvider.hpp"
+	"src/Skill.cpp"
+	"src/Skill.hpp"
+	"src/Tasks.cpp"
+	"src/Tasks.hpp"
 	"src/TemplateInstance.cpp"
 	"src/TemplateInstance.hpp"
 )

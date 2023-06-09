@@ -2,13 +2,19 @@
 #include "TemplateInstance.hpp"
 
 #include "Attributes.hpp"
+#include "Events.hpp"
+#include "Tasks.hpp"
 
+#include <xentara/config/FallbackHandler.hpp>
 #include <xentara/data/DataType.hpp>
 #include <xentara/data/ReadHandle.hpp>
 #include <xentara/data/WriteHandle.hpp>
 #include <xentara/memory/memoryResources.hpp>
 #include <xentara/memory/WriteSentinel.hpp>
 #include <xentara/model/Attribute.hpp>
+#include <xentara/model/ForEachAttributeFunction.hpp>
+#include <xentara/model/ForEachEventFunction.hpp>
+#include <xentara/model/ForEachTaskFunction.hpp>
 #include <xentara/process/ExecutionContext.hpp>
 #include <xentara/utils/json/decoder/Object.hpp>
 #include <xentara/utils/json/decoder/Errors.hpp>
@@ -24,7 +30,7 @@ TemplateInstance::Class TemplateInstance::Class::_instance;
 auto TemplateInstance::loadConfig(const ConfigIntializer &initializer,
 		utils::json::decoder::Object &jsonObject,
 		config::Resolver &resolver,
-		const FallbackConfigHandler &fallbackHandler) -> void
+		const config::FallbackHandler &fallbackHandler) -> void
 {
 	// Keep track of which inputs/outputs have been loaded
 	// @todo add more loaded flags for all required inputs and outputs
@@ -199,46 +205,35 @@ auto TemplateInstance::updateState(std::chrono::system_clock::time_point timeSta
 	}
 }
 
-auto TemplateInstance::resolveAttribute(std::string_view name) -> const model::Attribute *
+auto TemplateInstance::forEachAttribute(const model::ForEachAttributeFunction &function) const -> bool
 {
 	/// @todo handle any additional attributes this class supports, including attributes inherited from the client
-	return model::Attribute::resolve(name,
-		attributes::kExecutionState,
-		attributes::kExecutionTime,
-		attributes::kError);
+	return
+		function(attributes::kExecutionState) ||
+		function(attributes::kExecutionTime) ||
+		function(attributes::kError);
 }
 
-auto TemplateInstance::resolveEvent(std::string_view name) -> std::shared_ptr<process::Event>
+auto TemplateInstance::forEachEvent(const model::ForEachEventFunction &function) -> bool
 {
 	// Handle all the events we support
-	if (name == "executed"sv)
-	{
-		return std::shared_ptr<process::Event>(sharedFromThis(), &_executedEvent);
-	}
-	else if (name == "error"sv)
-	{
-		return std::shared_ptr<process::Event>(sharedFromThis(), &_errorEvent);
-	}
+	return
+		function(events::kExecuted, sharedFromThis(&_executedEvent)) ||
+		function(events::kError, sharedFromThis(&_errorEvent));
 
 	/// @todo handle any additional events this class supports
-
-	return nullptr;
 }
 
-auto TemplateInstance::resolveTask(std::string_view name) -> std::shared_ptr<process::Task>
+auto TemplateInstance::forEachTask(const model::ForEachTaskFunction &function) -> bool
 {
 	// Handle all the tasks we support
-	if (name == "execute"sv)
-	{
-		return std::shared_ptr<process::Task>(sharedFromThis(), &_executeTask);
-	}
+	return
+		function(tasks::kExecute, sharedFromThis(&_executeTask));
 
 	/// @todo handle any additional tasks this class supports
-
-	return nullptr;
 }
 
-auto TemplateInstance::readHandle(const model::Attribute &attribute) const noexcept -> data::ReadHandle
+auto TemplateInstance::makeReadHandle(const model::Attribute &attribute) const noexcept -> std::optional<data::ReadHandle>
 {
 	// Try our attributes
 	if (attribute == attributes::kExecutionState)
@@ -256,7 +251,7 @@ auto TemplateInstance::readHandle(const model::Attribute &attribute) const noexc
 
 	/// @todo add support for any additional attributes, including attributes inherited from the client
 
-	return data::ReadHandle::Error::Unknown;
+	return std::nullopt;
 }
 
 auto TemplateInstance::realize() -> void

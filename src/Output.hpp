@@ -3,7 +3,7 @@
 
 #include <xentara/config/Resolver.hpp>
 #include <xentara/data/WriteHandle.hpp>
-#include <xentara/model/GenericElement.hpp>
+#include <xentara/model/Element.hpp>
 #include <xentara/utils/json/decoder/Value.hpp>
 
 #include <memory>
@@ -35,7 +35,7 @@ public:
 
 private:
 	/// @brief Gets a write handle
-	auto writeHandle(model::GenericElement &element, std::string_view attributeName) -> data::WriteHandle;
+	auto writeHandle(model::Element &element, std::string_view attributeName) -> data::WriteHandle;
 
 	/// @brief Gets a name for the element for use in error messages
 	auto elementName() const -> std::string;
@@ -45,7 +45,7 @@ private:
 	[[noreturn]] auto handleWriteError(std::error_code error) -> void;
 
 	/// @brief The xentara element representing the output we are supposed to write
-	std::weak_ptr<model::GenericElement> _element;
+	std::weak_ptr<model::Element> _element;
 
 	/// @brief The write handle for the value of the output
 	data::WriteHandle _value;

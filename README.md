@@ -31,23 +31,23 @@ cmake --build . --target docs
 
 This will generate HTML documentation in the subdirectory *docs/html*.
 
-## Xentara Microservice Templates
+## Xentara Skill Element Templates
 
-*(See [Microservices](https://docs.xentara.io/xentara/xentara_microservices.html) in the [Xentara documentation](https://docs.xentara.io/xentara/))*
+*(See [Skill Elements](https://docs.xentara.io/xentara/xentara_skills.html#xentara_skill_elements) in the [Xentara documentation](https://docs.xentara.io/xentara/))*
 
 ### Microservice Instance Template
 
 [src/TemplateInstance.hpp](src/TemplateInstance.hpp)  
 [src/TemplateInstance.cpp](src/TemplateInstance.cpp)
 
-The instance microservice template provides template code for services that do signal processing.
+The instance skill element template provides template code for services that do signal processing.
 
 The template code has the following features:
 
-- The microservice tracks an error code for the processing it does. If an error occurs, the system is put into a safe state.
-- The microservice publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *execute*
+- The skill element tracks an error code for the processing it does. If an error occurs, the system is put into a safe state.
+- The skill element publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *execute*
   that performs the signal processing.
-- The microservice publishes a [Xentara event](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) called *executed*
+- The skill element publishes a [Xentara event](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) called *executed*
   that is fired when the microservice is executed.
-- The microservice publishes a [Xentara event](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) called *error*
+- The skill element publishes a [Xentara event](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) called *error*
   that is fired when an error occurrs.

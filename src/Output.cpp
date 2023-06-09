@@ -16,7 +16,7 @@ namespace xentara::plugins::templateMicroservice
 auto Output::loadConfig(utils::json::decoder::Value &value, config::Resolver &resolver) -> void
 {
 	// Just submit a request
-	resolver.submit<model::GenericElement>(value, std::ref(_element));
+	resolver.submit<model::Element>(value, std::ref(_element));
 }
 
 auto Output::prepare() -> void
@@ -38,7 +38,7 @@ auto Output::prepare() -> void
 	}
 }
 
-auto Output::writeHandle(model::GenericElement &element, std::string_view attributeName) -> data::WriteHandle
+auto Output::writeHandle(model::Element &element, std::string_view attributeName) -> data::WriteHandle
 {
 	// Get the handle
 	auto handle = element.attributeWriteHandle(attributeName);
