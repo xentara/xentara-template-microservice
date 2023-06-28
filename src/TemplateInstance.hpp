@@ -166,9 +166,9 @@ private:
 	/// @brief Updates the state
 	auto updateState(std::chrono::system_clock::time_point timeStamp, std::error_code error = std::error_code()) -> void;
 
-	/// @brief A Xentara event that is fired when the microservice has been executed successfully
+	/// @brief A Xentara event that is raised when the microservice has been executed successfully
 	process::Event _executedEvent;
-	/// @brief A Xentara event that is fired when an error occurred executing the microservice
+	/// @brief A Xentara event that is raised when an error occurred executing the microservice
 	process::Event _executionErrorEvent;
 
 	/// @brief The "execute" task

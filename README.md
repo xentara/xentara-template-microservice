@@ -48,6 +48,6 @@ The template code has the following features:
 - The skill element publishes a [Xentara task](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_tasks) called *execute*
   that performs the signal processing.
 - The skill element publishes a [Xentara event](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) called *executed*
-  that is fired when the microservice is executed.
+  that is raised when the microservice is executed.
 - The skill element publishes a [Xentara event](https://docs.xentara.io/xentara/xentara_element_members.html#xentara_events) called *executionError*
-  that is fired when an error occurrs executing the microservice.
+  that is raised when an error occurrs executing the microservice.
