@@ -15,6 +15,6 @@ using namespace xentara::literals;
 const process::Event::Role kExecuted { "deadbeef-dead-beef-dead-beefdeadbeef"_uuid, "executed"sv };
 
 /// @todo assign a unique UUID
-const process::Event::Role kError { "deadbeef-dead-beef-dead-beefdeadbeef"_uuid, "error"sv };
+const process::Event::Role kExecutionError { "deadbeef-dead-beef-dead-beefdeadbeef"_uuid, "executionError"sv };
 
 } // namespace xentara::plugins::templateMicroservice::events

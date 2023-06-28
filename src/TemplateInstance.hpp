@@ -168,8 +168,8 @@ private:
 
 	/// @brief A Xentara event that is fired when the microservice has been executed successfully
 	process::Event _executedEvent;
-	/// @brief A Xentara event that is fired when an error occurred
-	process::Event _errorEvent;
+	/// @brief A Xentara event that is fired when an error occurred executing the microservice
+	process::Event _executionErrorEvent;
 
 	/// @brief The "execute" task
 	ExecuteTask _executeTask { *this };

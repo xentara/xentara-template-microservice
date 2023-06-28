@@ -15,6 +15,7 @@
 #include <xentara/model/ForEachAttributeFunction.hpp>
 #include <xentara/model/ForEachEventFunction.hpp>
 #include <xentara/model/ForEachTaskFunction.hpp>
+#include <xentara/process/EventList.hpp>
 #include <xentara/process/ExecutionContext.hpp>
 #include <xentara/utils/json/decoder/Object.hpp>
 #include <xentara/utils/json/decoder/Errors.hpp>
@@ -191,18 +192,10 @@ auto TemplateInstance::updateState(std::chrono::system_clock::time_point timeSta
 	state._executionTime = timeStamp;
 	state._error = error;
 
-	// Commit the data
-	sentinel.commit();
-
-	// Fire the correct event
-	if (error)
-	{
-		_errorEvent.fire();
-	}
-	else
-	{
-		_executedEvent.fire();
-	}
+	// Determine the correct event
+	const auto &event = error ? _executionErrorEvent : _executedEvent;
+	// Commit the data and raise the event
+	sentinel.commit(timeStamp, event);
 }
 
 auto TemplateInstance::forEachAttribute(const model::ForEachAttributeFunction &function) const -> bool
@@ -219,7 +212,7 @@ auto TemplateInstance::forEachEvent(const model::ForEachEventFunction &function)
 	// Handle all the events we support
 	return
 		function(events::kExecuted, sharedFromThis(&_executedEvent)) ||
-		function(events::kError, sharedFromThis(&_errorEvent));
+		function(events::kExecutionError, sharedFromThis(&_executionErrorEvent));
 
 	/// @todo handle any additional events this class supports
 }

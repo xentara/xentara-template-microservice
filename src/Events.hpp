@@ -10,6 +10,6 @@ namespace xentara::plugins::templateMicroservice::events
 /// @brief A Xentara event that is fired when the microservice instance was executed correctly
 extern const process::Event::Role kExecuted;
 /// @brief A Xentara event that is fired an error occurs executing the microservice instance
-extern const process::Event::Role kError;
+extern const process::Event::Role kExecutionError;
 
 } // namespace xentara::plugins::templateMicroservice::events
