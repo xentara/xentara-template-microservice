@@ -26,12 +26,9 @@ namespace xentara::plugins::templateMicroservice
 	
 using namespace std::literals;
 
-TemplateInstance::Class TemplateInstance::Class::_instance;
-
-auto TemplateInstance::loadConfig(const ConfigIntializer &initializer,
-		utils::json::decoder::Object &jsonObject,
-		config::Resolver &resolver,
-		const config::FallbackHandler &fallbackHandler) -> void
+auto TemplateInstance::load(utils::json::decoder::Object &jsonObject,
+	config::Resolver &resolver,
+	const config::FallbackHandler &fallbackHandler) -> void
 {
 	// Keep track of which inputs/outputs have been loaded
 	// @todo add more loaded flags for all required inputs and outputs
@@ -44,13 +41,13 @@ auto TemplateInstance::loadConfig(const ConfigIntializer &initializer,
 		/// @todo use a more descriptive keyword, and add a block for each supported input
 		if (name == "templateInput")
 		{
-			_templateInput.loadConfig(value, resolver);
+			_templateInput.load(value, resolver);
 			templateInputLoaded = true;
 		}
 		/// @todo use a more descriptive keyword, and add a block for each supported output
 		if (name == "templateOutput")
 		{
-			_templateOutput.loadConfig(value, resolver);
+			_templateOutput.load(value, resolver);
 			templateOutputLoaded = true;
 		}
 		/// @todo load custom configuration parameters
@@ -66,7 +63,7 @@ auto TemplateInstance::loadConfig(const ConfigIntializer &initializer,
 				utils::json::decoder::throwWithLocation(value, std::runtime_error("TODO is wrong with TODO parameter of template transaction"));
 			}
 
-			/// @todo set the appropriate member variables, and update configAttributes accordingly (if necessary) 
+			/// @todo set the appropriate member variables
 		}
 		else
 		{

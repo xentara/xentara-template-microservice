@@ -30,8 +30,6 @@ add_library(
 	"src/Input.hpp"
 	"src/Output.cpp"
 	"src/Output.hpp"
-	"src/Plugin.cpp"
-	"src/Plugin.hpp"
 	"src/Skill.cpp"
 	"src/Skill.hpp"
 	"src/Tasks.cpp"

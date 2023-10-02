@@ -14,11 +14,11 @@ namespace xentara::plugins::templateMicroservice
 {
 
 /// @brief A single output of the microservice
-class Output
+class Output final
 {
 public:
 	/// @brief Loads the output from a configuration value
-	auto loadConfig(utils::json::decoder::Value &value, config::Resolver &resolver) -> void;
+	auto load(utils::json::decoder::Value &value, config::Resolver &resolver) -> void;
 
 	/// @brief Prepares the output
 	auto prepare() -> void;
@@ -26,12 +26,12 @@ public:
 	/// @brief Writes the value as a certain type.
 	/// @throws std::runtime_error An error occurred.
 	template <typename Type>
-	auto write(const Type &value) -> void;
+	auto write(Type &&value) -> void;
 
 	/// @brief Writes the value as a certain type without throwing any errors.
 	/// @return Returns an error code on error, or a default constructed error code object on success.
 	template <typename Type>
-	auto write(const Type &value, std::nothrow_t) -> std::error_code;
+	auto write(Type &&value, std::nothrow_t) -> std::error_code;
 
 private:
 	/// @brief Gets a write handle
@@ -52,10 +52,10 @@ private:
 };
 
 template <typename Type>
-auto Output::write(const Type &value) -> void
+auto Output::write(Type &&value) -> void
 {
 	// Try to read the value
-	const auto error = _value.write<Type>(value);
+	const auto error = _value.write(std::forward<Type>(value));
 	// Handles errors
 	if (error)
 	{
@@ -64,9 +64,9 @@ auto Output::write(const Type &value) -> void
 }
 
 template <typename Type>
-auto Output::write(const Type &value, std::nothrow_t) -> std::error_code
+auto Output::write(Type &&value, std::nothrow_t) -> std::error_code
 {
-	return _value.write<Type>(value);
+	return _value.write(std::forward<Type>(value));
 }
 
 } // namespace xentara::plugins::templateMicroservice

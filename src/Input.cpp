@@ -11,7 +11,7 @@
 namespace xentara::plugins::templateMicroservice
 {
 
-auto Input::loadConfig(utils::json::decoder::Value &value, config::Resolver &resolver) -> void
+auto Input::load(utils::json::decoder::Value &value, config::Resolver &resolver) -> void
 {
 	// Just submit a request
 	resolver.submit<model::Element>(value, std::ref(_element));
