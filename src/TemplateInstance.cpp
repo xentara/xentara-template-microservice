@@ -41,7 +41,7 @@ auto TemplateInstance::loadConfig(const ConfigIntializer &initializer,
 			templateInputLoaded = true;
 		}
 		/// @todo use a more descriptive keyword, and add a block for each supported output
-		if (name == "templateOutput")
+		else if (name == "templateOutput")
 		{
 			_templateOutput.loadConfig(value, resolver);
 			templateOutputLoaded = true;
