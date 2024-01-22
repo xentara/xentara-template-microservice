@@ -5,7 +5,7 @@
 #include "Events.hpp"
 #include "Tasks.hpp"
 
-#include <xentara/config/FallbackHandler.hpp>
+#include <xentara/config/Errors.hpp>
 #include <xentara/data/DataType.hpp>
 #include <xentara/data/ReadHandle.hpp>
 #include <xentara/data/WriteHandle.hpp>
@@ -26,9 +26,7 @@ namespace xentara::plugins::templateMicroservice
 	
 using namespace std::literals;
 
-auto TemplateInstance::load(utils::json::decoder::Object &jsonObject,
-	config::Resolver &resolver,
-	const config::FallbackHandler &fallbackHandler) -> void
+auto TemplateInstance::load(utils::json::decoder::Object &jsonObject, config::Context &context) -> void
 {
 	// Keep track of which inputs/outputs have been loaded
 	// @todo add more loaded flags for all required inputs and outputs
@@ -41,13 +39,13 @@ auto TemplateInstance::load(utils::json::decoder::Object &jsonObject,
 		/// @todo use a more descriptive keyword, and add a block for each supported input
 		if (name == "templateInput")
 		{
-			_templateInput.load(value, resolver);
+			_templateInput.load(value, context);
 			templateInputLoaded = true;
 		}
 		/// @todo use a more descriptive keyword, and add a block for each supported output
 		if (name == "templateOutput")
 		{
-			_templateOutput.load(value, resolver);
+			_templateOutput.load(value, context);
 			templateOutputLoaded = true;
 		}
 		/// @todo load custom configuration parameters
@@ -67,9 +65,7 @@ auto TemplateInstance::load(utils::json::decoder::Object &jsonObject,
 		}
 		else
 		{
-			// Pass any unknown parameters on to the fallback handler, which will load the built-in parameters ("id", "uuid", and "children"),
-			// and throw an exception if the key is unknown
-            fallbackHandler(name, value);
+            config::throwUnknownParameterError(name);
 		}
     }
 
