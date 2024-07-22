@@ -94,6 +94,8 @@ private:
 
 		auto preparePostOperational(const process::ExecutionContext &context) -> Status final;
 
+		auto postOperational(const process::ExecutionContext &context) -> Status final;
+
 		/// @}
 
 	private:
@@ -105,8 +107,10 @@ private:
 	auto prePerformExecuteTask(const process::ExecutionContext &context) -> void;
 	/// @brief This function is called by the "execute" task.
 	auto performExecuteTask(const process::ExecutionContext &context) -> void;
-	/// @brief This function is called by the "execute" task on shutdown.
+	/// @brief This function is called by the "execute" task on shutdown or suspend.
 	auto postPerformExecuteTask(const process::ExecutionContext &context) -> void;
+	/// @brief This function determines if the shutdown or suspend of the "execute" task has completed.
+	auto checkPostPerformExecuteTask(const process::ExecutionContext &context) -> process::Task::Status;
 
 	/// @brief Executes the microservice.
 	/// @throws std::runtime_error An error occurred
@@ -114,6 +118,11 @@ private:
 	/// @brief Safes the state.
 	/// @return Returns an error code on error, or a default constructed error code object on success.
 	auto safe(std::chrono::system_clock::time_point timeStamp) -> std::error_code;
+
+	/// @brief Checks whether the state is safe
+	/// @return The safe state
+	/// @throws std::runtime_error An error occurred
+	auto isSafe() -> bool;
 
 	/// @brief Updates the state
 	auto updateState(std::chrono::system_clock::time_point timeStamp, std::error_code error = std::error_code()) -> void;

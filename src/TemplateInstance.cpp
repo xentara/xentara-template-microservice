@@ -130,7 +130,33 @@ auto TemplateInstance::postPerformExecuteTask(const process::ExecutionContext &c
 	}
 
 	// We are now suspended
-	updateState(timeStamp, CustomError::Suspended);
+	updateState(timeStamp, CustomError::Suspending);
+}
+
+auto TemplateInstance::checkPostPerformExecuteTask(const process::ExecutionContext &context) -> process::Task::Status
+{
+	// Get the time stamp
+	const auto timeStamp = context.scheduledTime();
+
+	try
+	{
+		// See if we are safe
+		if (isSafe())
+		{
+			updateState(timeStamp, CustomError::Suspended);
+			return process::Task::Status::Completed;
+		}
+
+		return process::Task::Status::Pending;
+	}
+	catch (...)
+	{
+		// Set the error status
+		updateState(timeStamp, utils::eh::currentErrorCode());
+
+		// If we cannot determine the state, then we just give up, as there is no point in waiting any longer
+		return process::Task::Status::Completed;
+	}
 }
 
 auto TemplateInstance::execute(std::chrono::system_clock::time_point timeStamp) -> void
@@ -172,6 +198,13 @@ auto TemplateInstance::safe(std::chrono::system_clock::time_point timeStamp) -> 
 	handleError(_templateOutput.write(double(), std::nothrow));
 
 	return error;
+}
+
+auto TemplateInstance::isSafe() -> bool
+{
+	/// @todo read inputs to determine whether the state is safe
+
+	return true;
 }
 
 auto TemplateInstance::updateState(std::chrono::system_clock::time_point timeStamp, std::error_code error) -> void
@@ -269,7 +302,13 @@ auto TemplateInstance::ExecuteTask::operational(const process::ExecutionContext 
 auto TemplateInstance::ExecuteTask::preparePostOperational(const process::ExecutionContext &context) -> Status
 {
 	_target.get().postPerformExecuteTask(context);
-	return Status::Completed;
+	return Status::Pending;
+}
+
+auto TemplateInstance::ExecuteTask::postOperational(const process::ExecutionContext &context) -> Status
+{
+	// Check if the task is done
+	return _target.get().checkPostPerformExecuteTask(context);
 }
 
 } // namespace xentara::plugins::templateMicroservice

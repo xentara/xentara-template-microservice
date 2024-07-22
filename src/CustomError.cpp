@@ -44,6 +44,9 @@ namespace
 		case CustomError::Pending:
 			return "the microservice instance has not been executed yet"s;
 
+		case CustomError::Suspending:
+			return "the microservice instance is in the process of being suspended"s;
+
 		case CustomError::Suspended:
 			return "the microservice instance is suspended"s;
 
