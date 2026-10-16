@@ -7,7 +7,7 @@
 namespace xentara::plugins::templateMicroservice
 {
 
-/// @brief Custom error codes used by the driver
+/// @brief Custom error codes used by the microservice
 /// @todo Add error codes for other custom errors
 enum class CustomError
 {
