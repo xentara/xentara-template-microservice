@@ -16,8 +16,6 @@ enum class CustomError
 
 	/// @brief The microservice instance has not been executed yet
 	Pending,
-	/// @brief The microservice instance is in the process of being suspended
-	Suspending,
 	/// @brief The microservice instance is suspended
 	Suspended,
 
